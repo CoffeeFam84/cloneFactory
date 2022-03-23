@@ -39,7 +39,7 @@ contract happyHomies is ERC721A, Ownable, ReentrancyGuard {
 
     // Constants //
     uint256 constant MAX_SUPPLY = 10000;
-    uint256 public price = 0.06 ether;
+    uint256 public price = 0.001 ether;
     uint256 public maxMint = 2; 
     uint256 public maxPresaleMint = 1; 
     uint256 public maxContestMint = 2;
