@@ -6,33 +6,36 @@ import { MinterFactory } from "../typechain";
 describe("MinterFactory", function () {
   it("Should clone and mint", async function () {
     const NFTMinterFactory = await ethers.getContractFactory("NFTMinter");
-    const HappyHomies = await ethers.getContractFactory("happyHomies");
+    const LOVEFActory = await ethers.getContractFactory("LovelessCityMetropass");
     const MinterFactoryFactory = await ethers.getContractFactory(
       "MinterFactory"
     );
-    console.log("deploying happyHomies ... ");
-    const happyHomies = await HappyHomies.deploy();
-    await happyHomies.deployed();
-    console.log("happyHomies address = ", happyHomies.address);
-
     const [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
-    const totalSupply = await happyHomies.totalSupply();
-    expect(totalSupply).to.be.equal(6);
-    console.log("totalSupply = ", totalSupply);
+    console.log("deploying happyHomies ... ");
+    const Love = await LOVEFActory.deploy(owner.address, owner.address, "https://baseURI/");
+    await Love.deployed();
+    console.log("Love address = ", Love.address);
 
-    console.log("setting saleActive to true ... ");
-    let tx = await happyHomies.setSaleActive(true);
+    console.log("setting onlyWhitelist to false ... ");
+    let tx = await Love.triggerWhitelist(false);
     await tx.wait();
-    const saleActive = await happyHomies.saleActive();
-    expect(saleActive).to.be.equal(true);
-    console.log("saleActive = ", saleActive);
+    const whitelistOnly = await Love.whitelistOnly();
+    expect(whitelistOnly).to.be.equal(false);
+    console.log("whitelistOnly = ", whitelistOnly);
 
-    console.log("owner is minting 2 ntfs ...");
-    tx = await happyHomies.mintToken(2, { value: "2000000000000000" });
+    console.log("setting saleIsActive to true");
+    tx = await Love.updateSaleStatus(true);
     await tx.wait();
-    const bal = await happyHomies.publicsaleAddressMinted(owner.address);
-    expect(bal).to.be.equal(2);
+    const saleIsActive = await Love.saleIsActive();
+    expect(saleIsActive).to.be.equal(true);
+    console.log("saleIsActive = ", saleIsActive);
+
+    console.log("owner is minting 1 ntf ...");
+    tx = await Love.purchase(1, "0x00", { value: "1000000000000000" });
+    await tx.wait();
+    const bal = await Love.balanceOf(owner.address);
+    expect(bal).to.be.equal(1);
     console.log("bal = ", bal);
 
     console.log("deploying NFTMinter ... ");
@@ -40,25 +43,19 @@ describe("MinterFactory", function () {
     await NFTMinter.deployed();
     console.log("NFTMinter address = ", NFTMinter.address);
 
-    const owner0 = await happyHomies.ownerOf(1);
-    console.log("owner of token 0 is ", owner0);
-
-    const owner5 = await happyHomies.ownerOf(7);
-    expect(owner5).to.be.equal(owner.address);
-
     console.log("deploying MinterFactory ...");
     const MinterFactory = await MinterFactoryFactory.deploy(
       NFTMinter.address,
-      happyHomies.address
+      Love.address
     );
     await MinterFactory.deployed();
     console.log("MinterFactory address = ", MinterFactory.address);
 
     expect(await MinterFactory.minter()).to.be.equal(NFTMinter.address);
-    expect(await MinterFactory.NFT()).to.be.equal(happyHomies.address);
+    expect(await MinterFactory.NFT()).to.be.equal(Love.address);
 
     console.log("cloning one ...");
-    tx = await MinterFactory._clone();
+    tx = await MinterFactory._clone({value: "1000000000000000"});
     await tx.wait();
 
     const cloned = await MinterFactory.returnClones(owner.address);
@@ -70,50 +67,54 @@ describe("MinterFactory", function () {
     const Nft = await MinterFactory.NFT();
     console.log("Nft = ", Nft);
 
-    console.log("minting 2 nfts by cloned minter ... ");
-    tx = await MinterFactory.mint(2, 0, { value: "2000000000000000" });
-    await tx.wait();
+    // console.log("minting 1 nft by cloned minter ... ");
+    // tx = await MinterFactory.mint(1, 0, { value: "1000000000000000" });
+    // await tx.wait();
 
-    const bal0 = await happyHomies.balanceOf(owner.address);
-    expect(bal0).to.be.equal(2);
+    const bal0 = await Love.balanceOf(owner.address);
+    expect(bal0).to.be.equal(1);
     console.log("cloned minter now has %d nfts", bal0);
 
     console.log("withdrawing cloned minter's nft ...");
-    tx = await MinterFactory.withdraw(0, 9, owner.address);
+    tx = await MinterFactory.withdraw(0, 1, owner.address);
     await tx.wait();
-    const balowner = await happyHomies.balanceOf(owner.address);
+    const balowner = await Love.balanceOf(owner.address);
     console.log("balance of owner is now %d", balowner);
-    expect(balowner).to.be.equal(3);
+    expect(balowner).to.be.equal(2);
   });
   it("Should clone and mint", async function () {
     const NFTMinterFactory = await ethers.getContractFactory("NFTMinter");
-    const HappyHomies = await ethers.getContractFactory("happyHomies");
+    const LOVEFActory = await ethers.getContractFactory("LovelessCityMetropass");
     const MinterFactoryFactory = await ethers.getContractFactory(
       "MinterFactory"
     );
-    console.log("deploying happyHomies ... ");
-    const happyHomies = await HappyHomies.deploy();
-    await happyHomies.deployed();
-    console.log("happyHomies address = ", happyHomies.address);
 
     const [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
-    const totalSupply = await happyHomies.totalSupply();
-    expect(totalSupply).to.be.equal(6);
-    console.log("totalSupply = ", totalSupply);
+    console.log("deploying happyHomies ... ");
+    const Love = await LOVEFActory.deploy(owner.address, owner.address, "https://baseURI/");
+    await Love.deployed();
+    console.log("Love address = ", Love.address);
 
-    console.log("setting saleActive to true ... ");
-    let tx = await happyHomies.setSaleActive(true);
+    console.log("setting onlyWhitelist to false ... ");
+    let tx = await Love.triggerWhitelist(false);
     await tx.wait();
-    const saleActive = await happyHomies.saleActive();
-    expect(saleActive).to.be.equal(true);
-    console.log("saleActive = ", saleActive);
+    const whitelistOnly = await Love.whitelistOnly();
+    expect(whitelistOnly).to.be.equal(false);
+    console.log("whitelistOnly = ", whitelistOnly);
 
-    console.log("owner is minting 2 ntfs ...");
-    tx = await happyHomies.mintToken(2, { value: "2000000000000000" });
+    console.log("setting saleIsActive to true");
+    tx = await Love.updateSaleStatus(true);
     await tx.wait();
-    const bal = await happyHomies.publicsaleAddressMinted(owner.address);
-    expect(bal).to.be.equal(2);
+    const saleIsActive = await Love.saleIsActive();
+    expect(saleIsActive).to.be.equal(true);
+    console.log("saleIsActive = ", saleIsActive);
+
+    console.log("owner is minting 1 ntfs ...");
+    tx = await Love.purchase(1, "0x00", { value: "1000000000000000" });
+    await tx.wait();
+    const bal = await Love.balanceOf(owner.address);
+    expect(bal).to.be.equal(1);
     console.log("bal = ", bal);
 
     console.log("deploying NFTMinter ... ");
@@ -121,22 +122,16 @@ describe("MinterFactory", function () {
     await NFTMinter.deployed();
     console.log("NFTMinter address = ", NFTMinter.address);
 
-    const owner0 = await happyHomies.ownerOf(1);
-    console.log("owner of token 0 is ", owner0);
-
-    const owner5 = await happyHomies.ownerOf(7);
-    expect(owner5).to.be.equal(owner.address);
-
     console.log("deploying MinterFactory ...");
     const MinterFactory = await MinterFactoryFactory.deploy(
       NFTMinter.address,
-      happyHomies.address
+      Love.address
     );
     await MinterFactory.deployed();
     console.log("MinterFactory address = ", MinterFactory.address);
 
     expect(await MinterFactory.minter()).to.be.equal(NFTMinter.address);
-    expect(await MinterFactory.NFT()).to.be.equal(happyHomies.address);
+    expect(await MinterFactory.NFT()).to.be.equal(Love.address);
 
     console.log("batch cloning and minting 50 ...")
     tx = await MinterFactory.connect(addr1).batchCloneAndMint(50, {value: "50000000000000000"});
@@ -151,8 +146,8 @@ describe("MinterFactory", function () {
     tx = await MinterFactory.connect(addr1).batchWithdraw(10, owner.address);
     await tx.wait();
 
-    const balace = await happyHomies.balanceOf(owner.address);
-    expect(balace).to.be.equal(12);
+    const balace = await Love.balanceOf(owner.address);
+    expect(balace).to.be.equal(11);
 
   });
 });

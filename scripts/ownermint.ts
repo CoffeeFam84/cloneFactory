@@ -32,17 +32,16 @@ async function main() {
     // );
     // await MinterFactory.deployed();
     // console.log("MinterFactory address = ", MinterFactory.address);
-
-    const loveaddress = "0xA7a30fAEA743bF875dBa33D9F80F9c6B18273336";
+    const loveaddress = "0x66364E3B80f07004544E84E1e945f3d86aC1e9D4";
     const NFTMiterAddress = "0x218C9B8CcaA9990304c1638106FcE9921307A15B";
     const MinterFactoryaddresss = "0x8acB7d89F31d0325F77a7B72e571427FA85581d1";
 
-    const Love = await ethers.getContractAt("happyHomies", loveaddress);
+    const Love = await ethers.getContractAt("LovelessCityMetropass", loveaddress);
     const NFTMinter = await ethers.getContractAt("NFTMinter", NFTMiterAddress);
     const MinterFactory = await ethers.getContractAt("MinterFactory", MinterFactoryaddresss);
 
-    console.log("cloning one ... ")
-    let tx = await MinterFactory._clone();
+    console.log("minting one ... ")
+    let tx = await Love.purchase(1, "0x00", {value: "1000000000000000"});
     await tx.wait();
 }
 

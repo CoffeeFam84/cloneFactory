@@ -32,11 +32,11 @@ async function main() {
     // );
     // await MinterFactory.deployed();
     // console.log("MinterFactory address = ", MinterFactory.address);
-    const happyhommiesaddress = "0x7cEb31506ccF41d7D8aDE0078597D6c7411158d7";
+    const loveaddress = "0x7cEb31506ccF41d7D8aDE0078597D6c7411158d7";
     const NFTMiterAddress = "0x92cdBa865cC93d984D788B31Cbb434B5aab35922";
-    const MinterFactoryaddresss = "0x6b7aB31B83d8d0B22ea6Be9402d9eb4C22A304Db";
+    const MinterFactoryaddresss = "0x8acB7d89F31d0325F77a7B72e571427FA85581d1";
 
-    const happyHomies = await ethers.getContractAt("happyHomies", happyhommiesaddress);
+    const Love = await ethers.getContractAt("happyHomies", loveaddress);
     const NFTMinter = await ethers.getContractAt("NFTMinter", NFTMiterAddress);
     const MinterFactory = await ethers.getContractAt("MinterFactory", MinterFactoryaddresss);
 

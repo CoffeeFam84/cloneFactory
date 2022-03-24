@@ -33,11 +33,11 @@ async function main() {
     // await MinterFactory.deployed();
     // console.log("MinterFactory address = ", MinterFactory.address);
 
-    const happyhommiesaddress = "0x69e627F734c54f6702f49ce6F4F0BE250D74397a";
-    const NFTMiterAddress = "0x62A82daeE89A43ece5Eb5dfCB7C627E13e3eb1CC";
-    const MinterFactoryaddresss = "0xF467e34ee39C29Fb2dcAC593F4eD333D3877dC24";
+    const loveaddress = "0xA7a30fAEA743bF875dBa33D9F80F9c6B18273336";
+    const NFTMiterAddress = "0x8e3861Fe2Ae1cd0728381211910C3B1935a11Dca";
+    const MinterFactoryaddresss = "0x8acB7d89F31d0325F77a7B72e571427FA85581d1";
 
-    const happyHomies = await ethers.getContractAt("happyHomies", happyhommiesaddress);
+    const happyHomies = await ethers.getContractAt("LovelessCityMetropass", loveaddress);
     const NFTMinter = await ethers.getContractAt("NFTMinter", NFTMiterAddress);
     const MinterFactory = await ethers.getContractAt("MinterFactory", MinterFactoryaddresss);
 
